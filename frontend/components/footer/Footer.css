@@ -1,0 +1,40 @@
+.footer {
+  max-width: 100%;
+  margin: auto auto 0;
+  padding: 30px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-size: 0.9rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+.footer span {
+  width: auto;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+/* =====================
+   MOBILE
+===================== */
+@media (max-width: 720px) {
+  .buttons {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .footer span {
+    white-space: normal;
+  }
+}
