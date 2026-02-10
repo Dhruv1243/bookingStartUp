@@ -1,17 +1,20 @@
 import "./index.css";
+import AppointIt from "../../assets/AppointIt.png";
 
 export const Index = () => {
   return (
     <div className="landing">
       <header className="nav">
         <div className="brand">
-          <span className="brand-mark">Logo</span>
+          <img className="brand-mark" src={AppointIt} alt="AppointIt logo" />
         </div>
       </header>
 
       <section className="hero">
         <div className="hero-copy">
-          <h1>Welcome to AppointIt</h1>
+          <h1>
+            Welcome to <span className="accent">Appoint.It</span>
+          </h1>
           <p className="subtext">
             The easiest way to manage bookings, clients, and schedules — all in
             one place.
@@ -21,7 +24,7 @@ export const Index = () => {
 
       <section className="button-section">
         <div className="buttons">
-          <button>Join</button>
+          <button>Join Us</button>
           <button>Sign In</button>
         </div>
       </section>

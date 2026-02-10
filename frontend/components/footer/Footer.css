@@ -1,6 +1,6 @@
 .footer {
   max-width: 100%;
-  margin: auto auto 0;
+  margin: 0px auto 0;
   padding: 30px 20px;
 
   display: flex;
@@ -16,6 +16,11 @@
   width: auto;
   flex: 0 0 auto;
   white-space: nowrap;
+}
+.footer a {
+  display: block;
+  text-decoration: none;
+  color: var(--muted);
 }
 
 /* =====================
@@ -36,5 +41,11 @@
 
   .footer span {
     white-space: normal;
+  }
+
+  .footer a {
+    display: block;
+    text-decoration: none;
+    color: var(--muted);
   }
 }
