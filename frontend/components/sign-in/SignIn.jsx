@@ -14,6 +14,7 @@ import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import ForgotPassword from "./ForgotPassword";
 import { GoogleIcon, FacebookIcon } from "./CustomIcons";
+import { useState } from "react";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -47,58 +48,20 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn() {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [open, setOpen] = React.useState(false);
+  const [formData, setFormData] = useState ({
+    email: '',
+    password: '',
+  });
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target]: e.target.value})
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    // TODO With backend later
+    console.log(formData)
+  }
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleSubmit = (event) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
-  const validateInputs = () => {
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
-    }
-
-    return isValid;
-  };
 
   return (
     <SignInContainer
@@ -146,53 +109,35 @@ export default function SignIn() {
           <FormControl>
             <FormLabel htmlFor="email">Email</FormLabel>
             <TextField
-              error={emailError}
-              helperText={emailErrorMessage}
-              id="email"
-              type="email"
               name="email"
-              placeholder="your@email.com"
-              autoComplete="email"
-              autoFocus
-              required
-              fullWidth
-              variant="outlined"
-              color={emailError ? "error" : "primary"}
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
             />
           </FormControl>
           <FormControl>
             <FormLabel htmlFor="password">Password</FormLabel>
             <TextField
-              error={passwordError}
-              helperText={passwordErrorMessage}
               name="password"
-              placeholder="******"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              required
-              fullWidth
-              variant="outlined"
-              color={passwordError ? "error" : "primary"}
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter your password"
             />
           </FormControl>
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <ForgotPassword open={open} handleClose={handleClose} />
+          <ForgotPassword  />
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            onClick={validateInputs}
           >
             Sign in
           </Button>
           <Link
             component="button"
-            type="button"
-            onClick={handleClickOpen}
             variant="body2"
             sx={{ alignSelf: "center" }}
           >

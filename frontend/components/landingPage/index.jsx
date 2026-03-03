@@ -1,5 +1,6 @@
 import "./index.css";
 import AppointIt from "../../assets/AppointIt.png";
+import { Link } from "react-router-dom";
 
 export const Index = () => {
   return (
@@ -24,8 +25,12 @@ export const Index = () => {
 
       <section className="button-section">
         <div className="buttons">
+          <Link to="/signup">
           <button>Join Us</button>
+          </Link>
+          <Link to="/signin">
           <button>Sign In</button>
+          </Link>
         </div>
       </section>
 
