@@ -1,4 +1,7 @@
 import * as React from "react";
+import { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -10,38 +13,10 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import MuiCard from "@mui/material/Card";
-import { styled } from "@mui/material/styles";
-import { useState } from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 
 import { GoogleIcon, FacebookIcon } from "../sign-in/CustomIcons";
-
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignSelf: "center",
-  width: "100%",
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  margin: "auto",
-  maxWidth: "450px",
-  borderRadius: theme.shape.borderRadius * 1.5,
-  boxShadow: theme.shadows[20],
-  backgroundColor: theme.palette.background.default
-}));
-
-const SignUpContainer = styled(Stack)(({ theme }) => ({
-  minHeight: "100vh",
-  padding: theme.spacing(2),
-  position: "relative",
-  [theme.breakpoints.up("sm")]: {
-    padding: theme.spacing(4)
-  },
-  background:
-    "radial-gradient(900px 520px at 85% -10%, rgba(108, 165, 255, 0.22), transparent 60%)," +
-    "radial-gradient(700px 520px at 10% 10%, rgba(125, 231, 210, 0.12), transparent 60%)," +
-    theme.palette.background.default
-}));
 
 export default function SignUp() {
   const [userRole, setUserRole] = useState("user");
@@ -53,29 +28,28 @@ export default function SignUp() {
     confirmPassword: "",
     orgName: "",
     orgDescription: "",
-    orgAddress: ""
+    orgAddress: "",
   });
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleRoleChange = role => {
+  const handleRoleChange = (role) => {
     setUserRole(role);
 
-    // clear org fields when switching to "user"
     if (role === "user") {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         orgName: "",
         orgDescription: "",
-        orgAddress: ""
+        orgAddress: "",
       }));
     }
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -87,161 +61,261 @@ export default function SignUp() {
     console.log(payload);
   };
 
+  // No hardcoded colors — let your theme control TextField styling
+  const inputSx = {
+    mt: 1,
+    "& .MuiOutlinedInput-root": {
+      borderRadius: 2,
+      // uses your theme overrides (MuiOutlinedInput) for bg/border
+    },
+  };
+
   return (
-    <SignUpContainer direction="column" justifyContent="center" alignItems="center">
-      <Card variant="outlined">
-        <Typography
-          component="h1"
-          variant="h4"
-          sx={{
-            width: "100%",
-            fontSize: "clamp(1.9rem, 6vw, 2.35rem)",
-            textAlign: "center"
-          }}
-        >
-          Create your account to get started!
-        </Typography>
-
-        <Stack direction="row" gap={2}>
-          <Button
-            fullWidth
-            variant={userRole === "user" ? "contained" : "outlined"}
-            onClick={() => handleRoleChange("user")}
+    <Stack
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+      sx={{
+        minHeight: "100vh",
+        px: 2,
+        py: 4,
+        bgcolor: "background.default",
+      }}
+    >
+      <Card
+        variant="outlined"
+        sx={{
+          width: "100%",
+          maxWidth: 450,
+          bgcolor: "background.paper",
+          borderRadius: 3,
+          border: 1,
+          borderColor: "divider",
+          boxShadow: "none",
+        }}
+      >
+        <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{
+              textAlign: "center",
+              fontWeight: 800,
+              letterSpacing: "-0.02em",
+              fontSize: "clamp(1.9rem, 6vw, 2.35rem)",
+            }}
           >
-            Join as a user
-          </Button>
-
-          <Button
-            fullWidth
-            variant={userRole === "owner" ? "contained" : "outlined"}
-            onClick={() => handleRoleChange("owner")}
-          >
-            Join as an employer
-          </Button>
-        </Stack>
-
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 2 }}
-        >
-          <FormControl>
-            <FormLabel>Username</FormLabel>
-            <TextField
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Enter your username"
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Email</FormLabel>
-            <TextField
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="123@email.com"
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Password</FormLabel>
-            <TextField
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Confirm Password</FormLabel>
-            <TextField
-              name="confirmPassword"
-              type="password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Please confirm your password"
-            />
-          </FormControl>
-
-          {userRole === "owner" && (
-            <>
-              <FormControl>
-                <FormLabel>Organization Name</FormLabel>
-                <TextField
-                  name="orgName"
-                  value={formData.orgName}
-                  onChange={handleChange}
-                  placeholder="Organization Name"
-                />
-              </FormControl>
-
-              <FormControl>
-                <FormLabel>Organization Description</FormLabel>
-                <TextField
-                  name="orgDescription"
-                  value={formData.orgDescription}
-                  onChange={handleChange}
-                  placeholder="Please enter a short description"
-                />
-              </FormControl>
-
-              <FormControl>
-                <FormLabel>Organization Address</FormLabel>
-                <TextField
-                  name="orgAddress"
-                  value={formData.orgAddress}
-                  onChange={handleChange}
-                  placeholder="Please enter a valid address"
-                />
-              </FormControl>
-            </>
-          )}
-
-          <FormControlLabel
-            control={<Checkbox name="rememberMe" color="primary" />}
-            label="Remember me"
-          />
-
-          <Button type="submit" variant="contained" fullWidth>
-            Create account
-          </Button>
-        </Box>
-
-        <Divider>or</Divider>
-
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={() => alert("Sign in with Google")}
-            startIcon={<GoogleIcon />}
-          >
-            Sign in with Google
-          </Button>
-
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={() => alert("Sign in with Facebook")}
-            startIcon={<FacebookIcon />}
-          >
-            Sign in with Facebook
-          </Button>
-
-          <Typography sx={{ textAlign: "center" }}>
-            Already have an account?{" "}
-            <Link href="/signin" variant="body2">
-              Sign in
-            </Link>
+            Create your account to get started!
           </Typography>
-        </Box>
+
+          {/* Role toggle */}
+          <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+            <Button
+              fullWidth
+              variant={userRole === "user" ? "contained" : "outlined"}
+              color="primary"
+              onClick={() => handleRoleChange("user")}
+              sx={{ fontWeight: 700 }}
+            >
+              Join as a user
+            </Button>
+
+            <Button
+              fullWidth
+              variant={userRole === "owner" ? "contained" : "outlined"}
+              color="primary"
+              onClick={() => handleRoleChange("owner")}
+              sx={{ fontWeight: 700 }}
+            >
+              Join as an employer
+            </Button>
+          </Stack>
+
+          {/* Form */}
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{
+              mt: 3,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <FormControl>
+              <FormLabel sx={{ color: "text.secondary" }}>Username</FormLabel>
+              <TextField
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder="Enter your username"
+                fullWidth
+                sx={inputSx}
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel sx={{ color: "text.secondary" }}>Email</FormLabel>
+              <TextField
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="123@email.com"
+                fullWidth
+                sx={inputSx}
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel sx={{ color: "text.secondary" }}>Password</FormLabel>
+              <TextField
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                fullWidth
+                sx={inputSx}
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel sx={{ color: "text.secondary" }}>
+                Confirm Password
+              </FormLabel>
+              <TextField
+                name="confirmPassword"
+                type="password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Please confirm your password"
+                fullWidth
+                sx={inputSx}
+              />
+            </FormControl>
+
+            {/* Employer fields */}
+            {userRole === "owner" && (
+              <Box sx={{ mt: 0.5 }}>
+                <Divider sx={{ my: 2 }} />
+
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <FormControl>
+                    <FormLabel sx={{ color: "text.secondary" }}>
+                      Organization Name
+                    </FormLabel>
+                    <TextField
+                      name="orgName"
+                      value={formData.orgName}
+                      onChange={handleChange}
+                      placeholder="Organization Name"
+                      fullWidth
+                      sx={inputSx}
+                    />
+                  </FormControl>
+
+                  <FormControl>
+                    <FormLabel sx={{ color: "text.secondary" }}>
+                      Organization Description
+                    </FormLabel>
+                    <TextField
+                      name="orgDescription"
+                      value={formData.orgDescription}
+                      onChange={handleChange}
+                      placeholder="Please enter a short description"
+                      fullWidth
+                      multiline
+                      minRows={3}
+                      sx={inputSx}
+                    />
+                  </FormControl>
+
+                  <FormControl>
+                    <FormLabel sx={{ color: "text.secondary" }}>
+                      Organization Address
+                    </FormLabel>
+                    <TextField
+                      name="orgAddress"
+                      value={formData.orgAddress}
+                      onChange={handleChange}
+                      placeholder="Please enter a valid address"
+                      fullWidth
+                      sx={inputSx}
+                    />
+                  </FormControl>
+                </Box>
+              </Box>
+            )}
+
+            <FormControlLabel
+              control={<Checkbox name="rememberMe" color="primary" />}
+              label={
+                <Box component="span" sx={{ color: "text.secondary" }}>
+                  Remember me
+                </Box>
+              }
+              sx={{ userSelect: "none" }}
+            />
+
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ fontWeight: 700 }}
+            >
+              Create account
+            </Button>
+          </Box>
+
+          <Divider sx={{ my: 3 }}>or</Divider>
+
+          {/* Social + link */}
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="primary"
+              onClick={() => alert("Sign in with Google")}
+              startIcon={<GoogleIcon />}
+              sx={{ fontWeight: 700 }}
+            >
+              Sign in with Google
+            </Button>
+
+            <Button
+              fullWidth
+              variant="outlined"
+              color="primary"
+              onClick={() => alert("Sign in with Facebook")}
+              startIcon={<FacebookIcon />}
+              sx={{ fontWeight: 700 }}
+            >
+              Sign in with Facebook
+            </Button>
+
+            <Typography
+              sx={{ textAlign: "center", color: "text.secondary", mt: 1 }}
+            >
+              Already have an account?{" "}
+              <Link
+                component={RouterLink}
+                to="/signin"
+                underline="none"
+                sx={{
+                  color: "text.primary",
+                  fontWeight: 700,
+                  "&:hover": { color: "text.primary" },
+                }}
+              >
+                Sign in
+              </Link>
+            </Typography>
+          </Box>
+        </CardContent>
       </Card>
-    </SignUpContainer>
+    </Stack>
   );
 }

@@ -1,64 +1,221 @@
-import "./index.css";
+/* eslint-disable */
 import AppointIt from "../../assets/AppointIt.png";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+import Link from "@mui/material/Link";
+
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
+import PlaceRoundedIcon from "@mui/icons-material/PlaceRounded";
 
 export const Index = () => {
   return (
-    <div className="landing">
-      <header className="nav">
-        <div className="brand">
-          <img className="brand-mark" src={AppointIt} alt="AppointIt logo" />
-        </div>
-      </header>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        bgcolor: "background.default",
+        color: "text.primary",
+      }}
+    >
+      {/* Top nav */}
+      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
+        <Box sx={{ display: "flex", alignItems: "center", py: 3 }}>
+          <Box
+            component="img"
+            src={AppointIt}
+            alt="AppointIt logo"
+            draggable={false}
+            sx={{ height: 64, width: "auto", userSelect: "none" }}
+          />
+        </Box>
+      </Container>
 
-      <section className="hero">
-        <div className="hero-copy">
-          <h1>
-            Welcome to <span className="accent">Appoint.It</span>
-          </h1>
-          <p className="subtext">
+      {/* Hero */}
+      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
+        <Box sx={{ mx: "auto", maxWidth: 760, textAlign: "center", pt: 6 }}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 800,
+              letterSpacing: "-0.02em",
+              fontSize: { xs: "2.1rem", sm: "3rem" },
+            }}
+          >
+            Welcome to{" "}
+            <Box
+              component="span"
+              sx={{ color: "text.primary", fontWeight: 800 }}
+            >
+              Appoint.It
+            </Box>
+          </Typography>
+
+          <Typography
+            sx={{
+              color: "text.secondary",
+              mt: 2,
+              fontSize: { xs: "0.95rem", sm: "1.05rem" },
+              lineHeight: 1.7,
+              mx: "auto",
+              maxWidth: 640,
+            }}
+          >
             The easiest way to manage bookings, clients, and schedules — all in
             one place.
-          </p>
-        </div>
-      </section>
+          </Typography>
 
-      <section className="button-section">
-        <div className="buttons">
-          <Link to="/signup">
-          <button>Join Us</button>
-          </Link>
-          <Link to="/signin">
-          <button>Sign In</button>
-          </Link>
-        </div>
-      </section>
+          {/* Buttons */}
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+            sx={{ mt: 4, alignItems: "center", justifyContent: "center" }}
+          >
+            <Button
+              component={RouterLink}
+              to="/signup"
+              variant="contained"
+              color="primary"
+              size="large"
+              fullWidth
+              sx={{ maxWidth: { xs: "100%", sm: 180 }, fontWeight: 700 }}
+            >
+              Join Us
+            </Button>
 
-      <section className="features" id="features">
-        <div className="feature-card">
-          <h3>Find more clients</h3>
-          <p>
-            Get discovered online and let clients book your services anytime,
-            anywhere — hassle free.
-          </p>
-        </div>
-        <div className="feature-card">
-          <h3>Smart Booking</h3>
-          <p>
-            Seamlessly sync with Google Calendar and avoid double bookings
-            automatically.
-          </p>
-        </div>
-        <div className="feature-card">
-          <h3>Find nearest services</h3>
-          <p>
-            Discover trusted services near you and book instantly based on your
-            location..
-          </p>
-        </div>
-      </section>
-    </div>
+            <Button
+              component={RouterLink}
+              to="/signin"
+              variant="outlined"
+              color="primary"
+              size="large"
+              fullWidth
+              sx={{ maxWidth: { xs: "100%", sm: 180 }, fontWeight: 700 }}
+            >
+              Sign In
+            </Button>
+          </Stack>
+        </Box>
+
+        {/* Features */}
+        <Box id="features" sx={{ mt: 10, pb: 8 }}>
+          <Divider />
+
+          <Box
+            sx={{
+              mt: 4,
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
+              gap: 2,
+            }}
+          >
+            <FeatureCard
+              icon={<SearchRoundedIcon fontSize="small" />}
+              title="Find more clients"
+              desc="Get discovered online and let clients book your services anytime, anywhere — hassle free."
+            />
+            <FeatureCard
+              icon={<CalendarMonthRoundedIcon fontSize="small" />}
+              title="Smart Booking"
+              desc="Seamlessly sync with Google Calendar and avoid double bookings automatically."
+            />
+            <FeatureCard
+              icon={<PlaceRoundedIcon fontSize="small" />}
+              title="Find nearest services"
+              desc="Discover trusted services near you and book instantly based on your location."
+            />
+          </Box>
+
+          {/* Footer links */}
+          <Stack
+            direction="row"
+            spacing={3}
+            useFlexGap
+            flexWrap="wrap"
+            justifyContent="center"
+            sx={{ mt: 5 }}
+          >
+            <FooterLink href="#features">Features</FooterLink>
+            <FooterLink href="#pricing">Pricing</FooterLink>
+            <FooterLink href="#faq">FAQ</FooterLink>
+            <FooterLink href="#contact">Contact</FooterLink>
+          </Stack>
+        </Box>
+      </Container>
+    </Box>
   );
 };
+
+function FooterLink({ href, children }) {
+  return (
+    <Link
+      href={href}
+      underline="none"
+      sx={{
+        color: "text.secondary",
+        "&:hover": { color: "text.primary" },
+      }}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function FeatureCard({ icon, title, desc }) {
+  return (
+    <Card
+      elevation={0}
+      sx={{
+        borderRadius: 3,
+        bgcolor: "background.paper",
+        border: 1,
+        borderColor: "divider",
+        boxShadow: "none",
+      }}
+    >
+      <CardContent sx={{ p: 2.5 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.25 }}>
+          <Box
+            sx={{
+              height: 32,
+              width: 32,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 2,
+              bgcolor: "action.hover",
+              border: 1,
+              borderColor: "divider",
+            }}
+          >
+            {icon}
+          </Box>
+
+          <Typography sx={{ fontWeight: 700, color: "text.primary" }}>
+            {title}
+          </Typography>
+        </Box>
+
+        <Typography
+          sx={{
+            mt: 1.25,
+            color: "text.secondary",
+            fontSize: "0.92rem",
+            lineHeight: 1.65,
+          }}
+        >
+          {desc}
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default Index;
