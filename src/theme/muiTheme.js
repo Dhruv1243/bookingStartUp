@@ -27,14 +27,14 @@ const muiTheme = createTheme({
   },
 
   typography: {
-    fontFamily: '"Archivo", system-ui, sans-serif',
+    fontFamily: '"Manrope", system-ui, sans-serif',
 
     h1: { fontWeight: 800 },
     h2: { fontWeight: 800 },
     h3: { fontWeight: 800 },
 
     button: {
-      fontFamily: '"DM Sans", system-ui, sans-serif',
+      fontFamily: '"Manrope", system-ui, sans-serif',
       fontWeight: 700,
       textTransform: "none",
     },
@@ -122,3 +122,4 @@ const muiTheme = createTheme({
 });
 
 export default muiTheme;
+
