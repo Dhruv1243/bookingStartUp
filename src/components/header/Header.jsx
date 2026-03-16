@@ -1,12 +1,19 @@
 import * as React from "react";
+import NextLink from "next/link";
+import { signOut, useSession } from "next-auth/react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import NextLink from "next/link";
+import Button from "@mui/material/Button";
+
+const navItems = ["navItem1", "navItem2", "navItem3"];
 
 export default function Header({ logoSrc, brand = "Appoint.It" }) {
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
+
   return (
     <AppBar
       position="sticky"
@@ -19,7 +26,7 @@ export default function Header({ logoSrc, brand = "Appoint.It" }) {
       }}
     >
       <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ py: 1.5 }}>
+        <Toolbar disableGutters sx={{ py: 1.5, gap: 3 }}>
           {logoSrc ? (
             <Box
               component="img"
@@ -41,11 +48,52 @@ export default function Header({ logoSrc, brand = "Appoint.It" }) {
                 letterSpacing: "-0.02em",
                 textDecoration: "none",
                 color: "inherit",
+                flexShrink: 0,
               }}
             >
               {brand}
             </Typography>
           )}
+
+          {isAuthenticated ? (
+            <>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: { xs: 1, sm: 2 },
+                  ml: 2,
+                }}
+              >
+                {navItems.map((item) => (
+                  <Button
+                    key={item}
+                    component={NextLink}
+                    href="/"
+                    color="inherit"
+                    sx={{
+                      color: "text.secondary",
+                      fontWeight: 600,
+                      minWidth: "auto",
+                    }}
+                  >
+                    {item}
+                  </Button>
+                ))}
+              </Box>
+
+              <Box sx={{ ml: "auto" }}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => signOut({ callbackUrl: "/signin" })}
+                  sx={{ fontWeight: 700 }}
+                >
+                  Logout
+                </Button>
+              </Box>
+            </>
+          ) : null}
         </Toolbar>
       </Container>
     </AppBar>

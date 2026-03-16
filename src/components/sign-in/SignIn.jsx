@@ -1,5 +1,7 @@
 import * as React from "react";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -13,41 +15,28 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import Alert from "@mui/material/Alert";
 
 import ForgotPassword from "./ForgotPassword";
 import { GoogleIcon } from "./CustomIcons";
 
 export default function SignIn() {
+  const router = useRouter();
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
+  const [formError, setFormError] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = (event) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
-
-    const data = new FormData(event.currentTarget);
-
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
-  const validateInputs = () => {
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-
+  const validateInputs = (email, password) => {
     let isValid = true;
 
-    if (!email?.value || !/\S+@\S+\.\S+/.test(email.value)) {
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError(true);
       setEmailErrorMessage("Please enter a valid email address.");
       isValid = false;
@@ -56,7 +45,7 @@ export default function SignIn() {
       setEmailErrorMessage("");
     }
 
-    if (!password?.value || password.value.length < 6) {
+    if (!password || password.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage("Password must be at least 6 characters long.");
       isValid = false;
@@ -66,6 +55,35 @@ export default function SignIn() {
     }
 
     return isValid;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setFormError("");
+
+    const data = new FormData(event.currentTarget);
+    const email = String(data.get("email") ?? "").trim();
+    const password = String(data.get("password") ?? "");
+
+    if (!validateInputs(email, password)) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+      callbackUrl: "/",
+    });
+    setIsSubmitting(false);
+
+    if (result?.error) {
+      setFormError("Invalid email or password.");
+      return;
+    }
+
+    await router.push(result?.url ?? "/");
   };
 
   return (
@@ -106,10 +124,7 @@ export default function SignIn() {
             }}
           >
             Sign in to your{" "}
-            <Box
-              component="span"
-              sx={{ color: "text.primary", fontWeight: 700 }}
-            >
+            <Box component="span" sx={{ color: "text.primary", fontWeight: 700 }}>
               Appoint.It
             </Box>{" "}
             account
@@ -126,9 +141,10 @@ export default function SignIn() {
               gap: 2,
             }}
           >
+            {formError ? <Alert severity="error">{formError}</Alert> : null}
+
             <FormControl>
               <FormLabel sx={{ color: "text.secondary" }}>Email</FormLabel>
-
               <TextField
                 error={emailError}
                 helperText={emailErrorMessage}
@@ -148,7 +164,6 @@ export default function SignIn() {
 
             <FormControl>
               <FormLabel sx={{ color: "text.secondary" }}>Password</FormLabel>
-
               <TextField
                 error={passwordError}
                 helperText={passwordErrorMessage}
@@ -167,24 +182,14 @@ export default function SignIn() {
 
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label={
-                <Box component="span" sx={{ color: "text.secondary" }}>
-                  Remember me
-                </Box>
-              }
+              label={<Box component="span" sx={{ color: "text.secondary" }}>Remember me</Box>}
               sx={{ userSelect: "none" }}
             />
 
             <ForgotPassword open={open} handleClose={handleClose} />
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              onClick={validateInputs}
-              sx={{ fontWeight: 700 }}
-            >
-              Sign in
+            <Button type="submit" fullWidth variant="contained" sx={{ fontWeight: 700 }} disabled={isSubmitting}>
+              {isSubmitting ? "Signing in..." : "Sign in"}
             </Button>
 
             <Link
@@ -206,29 +211,12 @@ export default function SignIn() {
           <Divider sx={{ my: 3 }}>or</Divider>
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert("Continue with Google")}
-              startIcon={<GoogleIcon />}
-              sx={{ fontWeight: 700 }}
-            >
-              Continue with Google
+            <Button fullWidth variant="outlined" disabled startIcon={<GoogleIcon />} sx={{ fontWeight: 700 }}>
+              Google sign-in not configured
             </Button>
-<Typography
-              sx={{ textAlign: "center", color: "text.secondary", mt: 1 }}
-            >
+            <Typography sx={{ textAlign: "center", color: "text.secondary", mt: 1 }}>
               Don&apos;t have an account?{" "}
-              <Link
-                component={NextLink}
-                href="/signup"
-                underline="none"
-                sx={{
-                  color: "text.primary",
-                  fontWeight: 700,
-                  "&:hover": { color: "text.primary" },
-                }}
-              >
+              <Link component={NextLink} href="/signup" underline="none" sx={{ color: "text.primary", fontWeight: 700, "&:hover": { color: "text.primary" } }}>
                 Sign up
               </Link>
             </Typography>
@@ -238,9 +226,3 @@ export default function SignIn() {
     </Stack>
   );
 }
-
-
-
-
-
-

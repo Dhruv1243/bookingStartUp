@@ -1,6 +1,7 @@
 import * as React from "react";
-import { useState } from "react";
+import { useRouter } from "next/router";
 import NextLink from "next/link";
+import { signIn } from "next-auth/react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -14,13 +15,14 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import Alert from "@mui/material/Alert";
 
 import { GoogleIcon } from "../sign-in/CustomIcons";
 
 export default function SignUp() {
-  const [userRole, setUserRole] = useState("user");
-
-  const [formData, setFormData] = useState({
+  const router = useRouter();
+  const [userRole, setUserRole] = React.useState("user");
+  const [formData, setFormData] = React.useState({
     username: "",
     email: "",
     password: "",
@@ -29,9 +31,11 @@ export default function SignUp() {
     orgDescription: "",
     orgAddress: "",
   });
+  const [formError, setFormError] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (event) => {
+    const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -48,16 +52,45 @@ export default function SignUp() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setFormError("");
+    setIsSubmitting(true);
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match.");
+    const response = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...formData,
+        userRole,
+      }),
+    });
+
+    const payload = await response.json();
+
+    if (!response.ok) {
+      setIsSubmitting(false);
+      setFormError(payload.message || "Unable to create your account.");
       return;
     }
 
-    const payload = { ...formData, userRole };
-    console.log(payload);
+    const signInResult = await signIn("credentials", {
+      redirect: false,
+      email: formData.email,
+      password: formData.password,
+      callbackUrl: "/",
+    });
+
+    setIsSubmitting(false);
+
+    if (signInResult?.error) {
+      setFormError("Account created, but automatic sign-in failed. Please sign in manually.");
+      return;
+    }
+
+    await router.push(signInResult?.url ?? "/");
   };
 
   const inputSx = {
@@ -107,7 +140,6 @@ export default function SignUp() {
             Create your account
           </Typography>
 
-          {/* Role toggle */}
           <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
             <Button
               fullWidth
@@ -130,119 +162,47 @@ export default function SignUp() {
             </Button>
           </Stack>
 
-          {/* Form */}
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{
-              mt: 3,
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-            }}
-          >
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3, display: "flex", flexDirection: "column", gap: 2 }}>
+            {formError ? <Alert severity="error">{formError}</Alert> : null}
+
             <FormControl>
               <FormLabel sx={{ color: "text.secondary" }}>Username</FormLabel>
-              <TextField
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                placeholder="Enter your username"
-                fullWidth
-                sx={inputSx}
-              />
+              <TextField name="username" value={formData.username} onChange={handleChange} placeholder="Enter your username" fullWidth sx={inputSx} />
             </FormControl>
 
             <FormControl>
               <FormLabel sx={{ color: "text.secondary" }}>Email</FormLabel>
-              <TextField
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="name@company.com"
-                fullWidth
-                sx={inputSx}
-              />
+              <TextField name="email" type="email" value={formData.email} onChange={handleChange} placeholder="name@company.com" fullWidth sx={inputSx} />
             </FormControl>
 
             <FormControl>
               <FormLabel sx={{ color: "text.secondary" }}>Password</FormLabel>
-              <TextField
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-                fullWidth
-                sx={inputSx}
-              />
+              <TextField name="password" type="password" value={formData.password} onChange={handleChange} placeholder="Enter your password" fullWidth sx={inputSx} />
             </FormControl>
 
             <FormControl>
-              <FormLabel sx={{ color: "text.secondary" }}>
-                Confirm Password
-              </FormLabel>
-              <TextField
-                name="confirmPassword"
-                type="password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="Confirm your password"
-                fullWidth
-                sx={inputSx}
-              />
+              <FormLabel sx={{ color: "text.secondary" }}>Confirm Password</FormLabel>
+              <TextField name="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} placeholder="Confirm your password" fullWidth sx={inputSx} />
             </FormControl>
 
-            {/* Employer fields */}
             {userRole === "owner" && (
               <Box sx={{ mt: 0.5 }}>
                 <Divider sx={{ my: 2 }} />
 
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   <FormControl>
-                    <FormLabel sx={{ color: "text.secondary" }}>
-                      Organization Name
-                    </FormLabel>
-                    <TextField
-                      name="orgName"
-                      value={formData.orgName}
-                      onChange={handleChange}
-                      placeholder="Organization Name"
-                      fullWidth
-                      sx={inputSx}
-                    />
+                    <FormLabel sx={{ color: "text.secondary" }}>Organization Name</FormLabel>
+                    <TextField name="orgName" value={formData.orgName} onChange={handleChange} placeholder="Organization Name" fullWidth sx={inputSx} />
                   </FormControl>
 
                   <FormControl>
-                    <FormLabel sx={{ color: "text.secondary" }}>
-                      Organization Description
-                    </FormLabel>
-                    <TextField
-                      name="orgDescription"
-                      value={formData.orgDescription}
-                      onChange={handleChange}
-                      placeholder="Brief description of your organization"
-                      fullWidth
-                      multiline
-                      minRows={3}
-                      sx={inputSx}
-                    />
+                    <FormLabel sx={{ color: "text.secondary" }}>Organization Description</FormLabel>
+                    <TextField name="orgDescription" value={formData.orgDescription} onChange={handleChange} placeholder="Brief description of your organization" fullWidth multiline minRows={3} sx={inputSx} />
                   </FormControl>
 
                   <FormControl>
-                    <FormLabel sx={{ color: "text.secondary" }}>
-                      Organization Address
-                    </FormLabel>
-                    <TextField
-                      name="orgAddress"
-                      value={formData.orgAddress}
-                      onChange={handleChange}
-                      placeholder="Street address"
-                      fullWidth
-                      sx={inputSx}
-                    />
+                    <FormLabel sx={{ color: "text.secondary" }}>Organization Address</FormLabel>
+                    <TextField name="orgAddress" value={formData.orgAddress} onChange={handleChange} placeholder="Street address" fullWidth sx={inputSx} />
                   </FormControl>
                 </Box>
               </Box>
@@ -250,53 +210,24 @@ export default function SignUp() {
 
             <FormControlLabel
               control={<Checkbox name="rememberMe" color="primary" />}
-              label={
-                <Box component="span" sx={{ color: "text.secondary" }}>
-                  Remember me
-                </Box>
-              }
+              label={<Box component="span" sx={{ color: "text.secondary" }}>Remember me</Box>}
               sx={{ userSelect: "none" }}
             />
 
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              sx={{ fontWeight: 700 }}
-            >
-              Create account
+            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ fontWeight: 700 }} disabled={isSubmitting}>
+              {isSubmitting ? "Creating account..." : "Create account"}
             </Button>
           </Box>
 
           <Divider sx={{ my: 3 }}>or</Divider>
 
-          {/* Social + link */}
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-            <Button
-              fullWidth
-              variant="outlined"
-              color="primary"
-              onClick={() => alert("Continue with Google")}
-              startIcon={<GoogleIcon />}
-              sx={{ fontWeight: 700 }}
-            >
-              Continue with Google
+            <Button fullWidth variant="outlined" color="primary" disabled startIcon={<GoogleIcon />} sx={{ fontWeight: 700 }}>
+              Google sign-up not configured
             </Button>
-            <Typography
-              sx={{ textAlign: "center", color: "text.secondary", mt: 1 }}
-            >
+            <Typography sx={{ textAlign: "center", color: "text.secondary", mt: 1 }}>
               Already have an account?{" "}
-              <Link
-                component={NextLink}
-                href="/signin"
-                underline="none"
-                sx={{
-                  color: "text.primary",
-                  fontWeight: 700,
-                  "&:hover": { color: "text.primary" },
-                }}
-              >
+              <Link component={NextLink} href="/signin" underline="none" sx={{ color: "text.primary", fontWeight: 700, "&:hover": { color: "text.primary" } }}>
                 Sign in
               </Link>
             </Typography>
@@ -306,6 +237,3 @@ export default function SignUp() {
     </Stack>
   );
 }
-
-
-
