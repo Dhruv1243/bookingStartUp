@@ -49,7 +49,6 @@ function ForgotPassword({ open, handleClose }) {
           label="Email address"
           placeholder="your@email.com"
           fullWidth
-          // No sx needed if your theme already styles MuiOutlinedInput / MuiTextField
         />
       </DialogContent>
 

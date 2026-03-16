@@ -6,17 +6,17 @@ const muiTheme = createTheme({
 
     primary: {
       main: "#FFFFFF",
-      contrastText: "#14161B",
+      contrastText: "#0A0A0B",
     },
 
     background: {
-      default: "#181A1F", // main page
-      paper: "#20232A", // cards / dialogs
+      default: "#0B0B0D",
+      paper: "#121316",
     },
 
     text: {
       primary: "#F5F7FA",
-      secondary: "#A1A8B3",
+      secondary: "#9AA1AC",
     },
 
     divider: "rgba(255,255,255,0.10)",
@@ -43,9 +43,16 @@ const muiTheme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        html: {
+          backgroundColor: "#0B0B0D",
+        },
         body: {
-          backgroundColor: "#181A1F",
+          backgroundColor: "#0B0B0D",
           color: "#F5F7FA",
+        },
+        '#__next': {
+          minHeight: "100vh",
+          backgroundColor: "#0B0B0D",
         },
       },
     },
@@ -53,7 +60,7 @@ const muiTheme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          backgroundColor: "#20232A",
+          backgroundColor: "#121316",
           border: "1px solid rgba(255,255,255,0.08)",
           boxShadow: "none",
         },
@@ -69,8 +76,8 @@ const muiTheme = createTheme({
 
         containedPrimary: {
           backgroundColor: "#FFFFFF",
-          color: "#14161B",
-          "&:hover": {
+          color: "#0A0A0B",
+          '&:hover': {
             backgroundColor: "#E6E6E6",
           },
         },
@@ -78,7 +85,7 @@ const muiTheme = createTheme({
         outlinedPrimary: {
           borderColor: "rgba(255,255,255,0.15)",
           color: "#F5F7FA",
-          "&:hover": {
+          '&:hover': {
             borderColor: "rgba(255,255,255,0.25)",
             backgroundColor: "rgba(255,255,255,0.04)",
           },
@@ -89,14 +96,14 @@ const muiTheme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          backgroundColor: "#1C1F25",
+          backgroundColor: "#101114",
           borderRadius: 12,
 
-          "&:hover .MuiOutlinedInput-notchedOutline": {
+          '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: "rgba(255,255,255,0.16)",
           },
 
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: "rgba(255,255,255,0.28)",
           },
         },
@@ -122,4 +129,3 @@ const muiTheme = createTheme({
 });
 
 export default muiTheme;
-
