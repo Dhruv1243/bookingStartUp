@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 
-import Index from "../components/landingPage/Index";
+import Index from "../components/landingPage/LandingPage";
 
 export default function HomePage() {
   const { data: session, status } = useSession();

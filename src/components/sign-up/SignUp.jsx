@@ -86,7 +86,9 @@ export default function SignUp() {
     setIsSubmitting(false);
 
     if (signInResult?.error) {
-      setFormError("Account created, but automatic sign-in failed. Please sign in manually.");
+      setFormError(
+        "Account created, but automatic sign-in failed. Please sign in manually.",
+      );
       return;
     }
 
@@ -162,27 +164,65 @@ export default function SignUp() {
             </Button>
           </Stack>
 
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3, display: "flex", flexDirection: "column", gap: 2 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 3, display: "flex", flexDirection: "column", gap: 2 }}
+          >
             {formError ? <Alert severity="error">{formError}</Alert> : null}
 
             <FormControl>
               <FormLabel sx={{ color: "text.secondary" }}>Username</FormLabel>
-              <TextField name="username" value={formData.username} onChange={handleChange} placeholder="Enter your username" fullWidth sx={inputSx} />
+              <TextField
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder="Enter your username"
+                fullWidth
+                sx={inputSx}
+              />
             </FormControl>
 
             <FormControl>
               <FormLabel sx={{ color: "text.secondary" }}>Email</FormLabel>
-              <TextField name="email" type="email" value={formData.email} onChange={handleChange} placeholder="name@company.com" fullWidth sx={inputSx} />
+              <TextField
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="name@company.com"
+                fullWidth
+                sx={inputSx}
+              />
             </FormControl>
 
             <FormControl>
               <FormLabel sx={{ color: "text.secondary" }}>Password</FormLabel>
-              <TextField name="password" type="password" value={formData.password} onChange={handleChange} placeholder="Enter your password" fullWidth sx={inputSx} />
+              <TextField
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                fullWidth
+                sx={inputSx}
+              />
             </FormControl>
 
             <FormControl>
-              <FormLabel sx={{ color: "text.secondary" }}>Confirm Password</FormLabel>
-              <TextField name="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} placeholder="Confirm your password" fullWidth sx={inputSx} />
+              <FormLabel sx={{ color: "text.secondary" }}>
+                Confirm Password
+              </FormLabel>
+              <TextField
+                name="confirmPassword"
+                type="password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm your password"
+                fullWidth
+                sx={inputSx}
+              />
             </FormControl>
 
             {userRole === "owner" && (
@@ -191,18 +231,60 @@ export default function SignUp() {
 
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   <FormControl>
-                    <FormLabel sx={{ color: "text.secondary" }}>Organization Name</FormLabel>
-                    <TextField name="orgName" value={formData.orgName} onChange={handleChange} placeholder="Organization Name" fullWidth sx={inputSx} />
+                    <FormLabel sx={{ color: "text.secondary" }}>
+                      Organization Name
+                    </FormLabel>
+                    <TextField
+                      name="orgName"
+                      value={formData.orgName}
+                      onChange={handleChange}
+                      placeholder="Organization Name"
+                      fullWidth
+                      sx={inputSx}
+                    />
                   </FormControl>
 
                   <FormControl>
-                    <FormLabel sx={{ color: "text.secondary" }}>Organization Description</FormLabel>
-                    <TextField name="orgDescription" value={formData.orgDescription} onChange={handleChange} placeholder="Brief description of your organization" fullWidth multiline minRows={3} sx={inputSx} />
+                    <FormLabel sx={{ color: "text.secondary" }}>
+                      Organization Description
+                    </FormLabel>
+                    <TextField
+                      name="orgDescription"
+                      value={formData.orgDescription}
+                      onChange={handleChange}
+                      placeholder="Brief description of your organization"
+                      fullWidth
+                      multiline
+                      minRows={3}
+                      sx={inputSx}
+                    />
                   </FormControl>
 
                   <FormControl>
-                    <FormLabel sx={{ color: "text.secondary" }}>Organization Address</FormLabel>
-                    <TextField name="orgAddress" value={formData.orgAddress} onChange={handleChange} placeholder="Street address" fullWidth sx={inputSx} />
+                    <FormLabel sx={{ color: "text.secondary" }}>
+                      Organization Address
+                    </FormLabel>
+                    <TextField
+                      name="orgAddress"
+                      value={formData.orgAddress}
+                      onChange={handleChange}
+                      placeholder="Street address"
+                      fullWidth
+                      sx={inputSx}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel sx={{ color: "text.secondary" }}>
+                      Organization Phone Number
+                    </FormLabel>
+                    <TextField
+                      name="orgNumber"
+                      value={formData.orgNumber}
+                      onChange={handleChange}
+                      placeholder="Your Organization Phone Number"
+                      fullWidth
+                      sx={inputSx}
+                    />
                   </FormControl>
                 </Box>
               </Box>
@@ -210,11 +292,22 @@ export default function SignUp() {
 
             <FormControlLabel
               control={<Checkbox name="rememberMe" color="primary" />}
-              label={<Box component="span" sx={{ color: "text.secondary" }}>Remember me</Box>}
+              label={
+                <Box component="span" sx={{ color: "text.secondary" }}>
+                  Remember me
+                </Box>
+              }
               sx={{ userSelect: "none" }}
             />
 
-            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ fontWeight: 700 }} disabled={isSubmitting}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ fontWeight: 700 }}
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Creating account..." : "Create account"}
             </Button>
           </Box>
@@ -222,12 +315,30 @@ export default function SignUp() {
           <Divider sx={{ my: 3 }}>or</Divider>
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-            <Button fullWidth variant="outlined" color="primary" disabled startIcon={<GoogleIcon />} sx={{ fontWeight: 700 }}>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="primary"
+              disabled
+              startIcon={<GoogleIcon />}
+              sx={{ fontWeight: 700 }}
+            >
               Google sign-up not configured
             </Button>
-            <Typography sx={{ textAlign: "center", color: "text.secondary", mt: 1 }}>
+            <Typography
+              sx={{ textAlign: "center", color: "text.secondary", mt: 1 }}
+            >
               Already have an account?{" "}
-              <Link component={NextLink} href="/signin" underline="none" sx={{ color: "text.primary", fontWeight: 700, "&:hover": { color: "text.primary" } }}>
+              <Link
+                component={NextLink}
+                href="/signin"
+                underline="none"
+                sx={{
+                  color: "text.primary",
+                  fontWeight: 700,
+                  "&:hover": { color: "text.primary" },
+                }}
+              >
                 Sign in
               </Link>
             </Typography>

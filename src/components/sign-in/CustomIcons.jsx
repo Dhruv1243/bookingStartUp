@@ -1,11 +1,5 @@
 import SvgIcon from "@mui/material/SvgIcon";
 
-/**
- * Theme-driven version (monochrome).
- * Inherit color from parent via `currentColor`.
- * You can control with: sx={{ color: "text.secondary" }} etc.
- */
-
 export function SitemarkIcon(props) {
   return (
     <SvgIcon

@@ -1,6 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { randomBytes, randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
+import {
+  randomBytes,
+  randomUUID,
+  scryptSync,
+  timingSafeEqual,
+} from "node:crypto";
 
 const usersFilePath = path.join(process.cwd(), "src", "data", "users.json");
 
@@ -20,7 +25,11 @@ async function readUsers() {
 }
 
 async function writeUsers(users) {
-  await fs.writeFile(usersFilePath, `${JSON.stringify(users, null, 2)}\n`, "utf8");
+  await fs.writeFile(
+    usersFilePath,
+    `${JSON.stringify(users, null, 2)}\n`,
+    "utf8",
+  );
 }
 
 export function hashPassword(password) {
@@ -47,7 +56,10 @@ export function verifyPassword(password, storedHash) {
 
 export async function findUserByEmail(email) {
   const users = await readUsers();
-  return users.find((user) => user.email.toLowerCase() === email.toLowerCase()) ?? null;
+  return (
+    users.find((user) => user.email.toLowerCase() === email.toLowerCase()) ??
+    null
+  );
 }
 
 export async function createUser({
@@ -58,11 +70,14 @@ export async function createUser({
   orgName,
   orgDescription,
   orgAddress,
+  orgNumber,
 }) {
   const users = await readUsers();
   const normalizedEmail = email.toLowerCase();
 
-  const existingUser = users.find((user) => user.email.toLowerCase() === normalizedEmail);
+  const existingUser = users.find(
+    (user) => user.email.toLowerCase() === normalizedEmail,
+  );
   if (existingUser) {
     throw new Error("An account with this email already exists.");
   }
@@ -76,6 +91,7 @@ export async function createUser({
     orgName: orgName ?? "",
     orgDescription: orgDescription ?? "",
     orgAddress: orgAddress ?? "",
+    orgNumber: orgNumber ?? "",
     createdAt: new Date().toISOString(),
   };
 

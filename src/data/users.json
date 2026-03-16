@@ -9,5 +9,16 @@
     "orgDescription": "",
     "orgAddress": "",
     "createdAt": "2026-03-16T21:07:51.330Z"
+  },
+  {
+    "id": "6f0c4cfe-6fcb-4c7f-b114-a53c5783a5c7",
+    "username": "TestBusiness",
+    "email": "testbusiness@company.com",
+    "passwordHash": "f0bb779999e256e27e1df24fec1c0f71:994524d59a0869cc55bc400cca608bd656c0dd5a771a1e32a09b79877d6db4454606addaab399f9b5c6d97d9a9e6dc5c1a7dfd028524909551b219a15b830dc0",
+    "userRole": "owner",
+    "orgName": "Test",
+    "orgDescription": "This is just a test",
+    "orgAddress": "123 street",
+    "createdAt": "2026-03-16T21:22:54.155Z"
   }
 ]
