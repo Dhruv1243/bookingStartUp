@@ -1,5 +1,3 @@
-/* eslint-disable */
-import AppointIt from "../../assets/AppointIt.png";
 import NextLink from "next/link";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -25,7 +23,6 @@ export const Index = () => {
         color: "text.primary",
       }}
     >
-      {/* Hero */}
       <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
         <Box sx={{ mx: "auto", maxWidth: 760, textAlign: "center", pt: 6 }}>
           <Typography
@@ -55,11 +52,10 @@ export const Index = () => {
               maxWidth: 640,
             }}
           >
-            The easiest way to manage bookings, clients, and schedules — all in
+            The easiest way to manage bookings, clients, and schedules, all in
             one place.
           </Typography>
 
-          {/* Buttons */}
           <Stack
             direction={{ xs: "column", sm: "row" }}
             spacing={2}
@@ -91,7 +87,6 @@ export const Index = () => {
           </Stack>
         </Box>
 
-        {/* Features */}
         <Box id="features" sx={{ mt: 10, pb: 8 }}>
           <Divider />
 
@@ -106,7 +101,7 @@ export const Index = () => {
             <FeatureCard
               icon={<SearchRoundedIcon fontSize="small" />}
               title="Find more clients"
-              desc="Get discovered online and let clients book your services anytime, anywhere — hassle free."
+              desc="Get discovered online and let clients book your services anytime, anywhere without friction."
             />
             <FeatureCard
               icon={<CalendarMonthRoundedIcon fontSize="small" />}
@@ -120,7 +115,6 @@ export const Index = () => {
             />
           </Box>
 
-          {/* Footer links */}
           <Stack
             direction="row"
             spacing={3}
@@ -206,8 +200,5 @@ function FeatureCard({ icon, title, desc }) {
 }
 
 export default Index;
-
-
-
 
 

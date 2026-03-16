@@ -6,7 +6,7 @@ import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import muiTheme from "../theme/muiTheme";
 
-export default function App({ pageProps }) {
+export default function App({ Component, pageProps }) {
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
