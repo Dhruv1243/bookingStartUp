@@ -1,4 +1,5 @@
 node_modules
+.next
 
 # Logs
 logs
@@ -26,3 +27,12 @@ dist-ssr
 *.sw?
 
 .env.local
+
+# Strapi backend
+portfolio-backend/.cache
+portfolio-backend/.tmp
+portfolio-backend/build
+portfolio-backend/dist
+portfolio-backend/.strapi
+portfolio-backend/.strapi-updater.json
+portfolio-backend/public/uploads

@@ -1,16 +1,60 @@
-# React + Vite
+# Portfolio Workspace
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains two separate apps:
 
-Currently, two official plugins are available:
+- `.`: Next.js frontend
+- `portfolio-backend/`: Strapi CMS backend
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Structure
 
-## React Compiler
+- `src/pages`: Next.js pages router
+- `src/components`: frontend UI components
+- `src/lib`: frontend auth and Strapi API helpers
+- `src/data`: local development data used by Auth.js credentials auth
+- `portfolio-backend/src`: Strapi backend source
+- `portfolio-backend/src/api/site-config`: single type for homepage and nav content
+- `portfolio-backend/src/api/project`: project collection for portfolio/project cards
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Frontend
 
-## Expanding the ESLint configuration
+Run the Next.js frontend from the repository root:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm run dev:frontend
+```
+
+Build the frontend:
+
+```bash
+npm run build:frontend
+```
+
+## Backend
+
+Run the Strapi backend:
+
+```bash
+npm run dev:backend
+```
+
+Build the Strapi admin:
+
+```bash
+npm run build:backend
+```
+
+By default Strapi runs on `http://localhost:1337`.
+
+## CMS-driven content
+
+The frontend now reads from Strapi with fallbacks:
+
+- `site-config`: hero, nav items, feature links, greeting text
+- `project`: repeated project cards on the landing page
+
+Set `NEXT_PUBLIC_STRAPI_URL` in `.env.local` if your backend does not run on `http://localhost:1337`.
+
+## Notes
+
+- The frontend currently uses Auth.js credentials auth with local user storage in `src/data/users.json`.
+- If Strapi is empty or offline, the frontend falls back to local default content so the UI still renders.

@@ -1,0 +1,38 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_configs",
+  "info": {
+    "singularName": "site-config",
+    "pluralName": "site-configs",
+    "displayName": "Site Config",
+    "description": "Homepage and navigation content for the frontend"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "heroTitle": {
+      "type": "string",
+      "required": true,
+      "default": "Welcome to Appoint.It"
+    },
+    "heroSubtitle": {
+      "type": "text",
+      "required": true,
+      "default": "The easiest way to manage bookings, clients, and schedules, all in one place."
+    },
+    "authenticatedGreeting": {
+      "type": "string",
+      "default": "This is your home screen."
+    },
+    "navItems": {
+      "type": "json"
+    },
+    "featureLinks": {
+      "type": "json"
+    },
+    "features": {
+      "type": "json"
+    }
+  }
+}
